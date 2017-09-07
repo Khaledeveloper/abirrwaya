@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.nfc.Tag;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
@@ -15,6 +16,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     DrawerLayout mDreawerLayout;
     ActionBarDrawerToggle drawerToggle;
     public Context context;
+    AdView adView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +64,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         mToolbar =(Toolbar)findViewById(R.id.ToolbarmainID);
         setSupportActionBar(mToolbar);
 
-      AdView adView =(AdView)findViewById(R.id.AdBannerMainID);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+
+
+     adView  =(AdView)findViewById(R.id.AdBannerMainID);
+
 
 
        // getPre();
@@ -77,6 +81,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         List_Index();
 
 
+
+    }
+
+    public void AdView(){
+
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
     }
 
