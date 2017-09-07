@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu  xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:id="@+id/SearchID"
+        android:icon="@drawable/searchpink24"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView"></item>
+
+
+    <item android:id="@+id/FavoritListID"
+        android:icon="@drawable/favoirtefolderpink24"
+        app:showAsAction="always"></item>
+
+        <item android:id="@+id/anotherapps"
+            android:title="تطبيقات هامة"
+
+            app:showAsAction="never"></item>
+
+        <item android:id="@+id/aboutIDmain"
+            android:title="عن التطبيق"
+            app:showAsAction="never"></item>
+    <item android:id="@+id/signupmenu"
+        app:showAsAction="never"
+        android:title="Sign up"></item>
+
+
+
+
+
+
+
+
+
+
+</menu>
