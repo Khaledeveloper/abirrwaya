@@ -24,6 +24,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         setSupportActionBar(mToolbar);
 
 
-        adView = (AdView) findViewById(R.id.AdBannerMainID);
+       // adView = (AdView) findViewById(R.id.AdBannerMainID);
 
 
         // getPre();
@@ -71,17 +72,30 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
 
         List_Index();
+        recyclerviewAd();
 
 
     }
 
-    public void AdView() {
+    public void recyclerviewAd(){
+
+        for (int i = 0 ; i<mModel.size() ; i+=4){
+            AdView adViewRecycler = new AdView(this);
+            adViewRecycler.setAdSize(new AdSize(320 , 150));
+            adViewRecycler.setAdUnitId("ca-app-pub-1156456518677227/5827654096");
+            adViewRecycler.loadAd(new AdRequest.Builder().build());
+            mModel.add(i,adViewRecycler);
+        }
+
+    }
+
+  /*  public void AdView() {
 
 
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
 
-    }
+    }*/
 
 
     public void List_Index() {

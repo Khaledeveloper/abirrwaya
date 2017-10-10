@@ -61,11 +61,89 @@ public class webviewhtml extends AppCompatActivity {
 
         page =data.getExtras().getInt("PageKey");
 
+
         StoryContent = data.getExtras().getString("ContentKey");
+        //int pagep = page;
+       if (page > 0 && page <4 ){
+            page--;
+
+        }
+        if (page > 4 && page <8 ){
+            page-=2;
+
+        }
+        if (page > 8 && page <12 ){
+            page-=3;
+
+        }
+        if (page > 12 && page <16 ){
+            page-=4;
+
+        }
+        if (page > 16 && page <20 ){
+            page-=5;
+
+        }
+        if (page > 20 && page <24 ){
+            page-=6;
+
+        }
+        if (page > 24 && page <28 ){
+            page-=7;
+
+        }
+        if (page > 28 && page <32 ){
+            page-=8;
+
+        }
+        if (page > 32 && page <36 ){
+            page-=9;
+
+        }
+        if (page > 36 && page <40 ){
+            page-=10;
+
+        }
+
+
+
+
+        if (page > 40 && page <44 ){
+            page-=10;
+
+        }
+        if (page > 44 && page <48 ){
+            page-=11;
+
+        }
+        if (page > 48 && page <52 ){
+            page-=12;
+
+        }
+        if (page > 52 && page <56 ){
+            page-=13;
+
+        }
+        if (page > 56 && page <60 ){
+            page-=14;
+
+        }
+        if (page > 60 && page <64 ){
+            page-=15;
+
+        }
+
+
+
 
 
 
         mWebview.loadUrl("file:///android_asset/html/"+ page+".htm");
+        Toast.makeText(this, ""+page, Toast.LENGTH_SHORT).show();
+
+
+
+
 
 
 

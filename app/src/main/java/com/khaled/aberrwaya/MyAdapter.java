@@ -18,16 +18,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
 
 /**
  * Created by Khaled on 8/17/2017.
  */
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     ItemClickListener mItemClickListener;
     DB_Sqlite_Favorite db_fav;
+    private static final int MENU_ITEM_VIEW_TYPE = 0;
+    private static final int AD_VIEW_TYPE = 1;
     ArrayList<Object> arrayList = new ArrayList<>();
     public Context context;
     ArrayList<StoryModel> List_favorite = new ArrayList<>();
@@ -45,66 +49,85 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }*/
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent, false);
+        switch (viewType) {
+            case AD_VIEW_TYPE:
+                View adbannerview = LayoutInflater.from(parent.getContext()).inflate(R.layout.adviewrecyclerview, parent,false);
 
-        return new  MyViewHolder(view);
+                return new adviewholder(adbannerview);
+            case MENU_ITEM_VIEW_TYPE:
+                default:
+
+            View MeunItemview = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent, false);
+
+            return new MyViewHolder(MeunItemview);
+
+        }
 
     }
 
     @Override
-    public void onBindViewHolder( MyViewHolder holder, int position) {
+    public void onBindViewHolder( RecyclerView.ViewHolder holder, int position) {
+   int viewType = getItemViewType(position);
 
 
-        /*
+      switch (viewType) {
+          case AD_VIEW_TYPE:
+              adviewholder adviewholderc=(adviewholder)holder;
+              AdView adView=(AdView)arrayList.get(position);
 
-           MenuItemViewHolder menuItemHolder = (MenuItemViewHolder) holder;
-                MenuItem menuItem = (MenuItem) mRecyclerViewItems.get(position);
+              ViewGroup adCardView =(ViewGroup)adviewholderc.itemView;
+              adCardView.removeAllViews();
 
-                // Get the menu item image resource ID.
-                String imageName = menuItem.getImageName();
-                int imageResID = mContext.getResources().getIdentifier(imageName, "drawable",
-                        mContext.getPackageName());
+              if (adView.getParent()!=null){
+                  ((ViewGroup)adView.getParent()).removeView(adView);
+              }
 
-                // Add the menu item details to the menu item view.
-                menuItemHolder.menuItemImage.setImageResource(imageResID);
-                menuItemHolder.menuItemName.setText(menuItem.getName());
-                menuItemHolder.menuItemPrice.setText(menuItem.getPrice());
-                menuItemHolder.menuItemCategory.setText(menuItem.getCategory());
-menuItemHolder.menuItemDescription.setText(menuItem.getDescription());
-
-         */
-      //  StoryModelM  storyModelM = new StoryModelM();
-        StoryModelM story =(StoryModelM) arrayList.get(position);
-        MyViewHolder myViewHolder = (MyViewHolder) holder;
-       /* myViewHolder.Listindex.setText(story.getTitleModel());
-        myViewHolder.ListContent.setText(story.getContentModel());*/
-
-       holder.Listindex.setText(story.getTitleModel());
-       holder.ListContent.setText(story.getContentModel());
-
-        String mTitle =holder.Listindex.getText().toString();
-
-        Context context =holder.itemView.getContext();
+              adCardView.addView(adView);
+              break;
 
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("tgpref1",Context.MODE_PRIVATE);
-        boolean tgpref = sharedPreferences.getBoolean("tgpref"+position,false);
+          case MENU_ITEM_VIEW_TYPE:
+              default:
+
+          StoryModelM story = (StoryModelM) arrayList.get(position);
+          MyViewHolder myViewHolder = (MyViewHolder) holder;
+
+          myViewHolder.Listindex.setText(story.getTitleModel());
+          myViewHolder.ListContent.setText(story.getContentModel());
+
+          String mTitle = myViewHolder.Listindex.getText().toString();
+
+          Context context = holder.itemView.getContext();
 
 
-        if (tgpref){
-           holder.toggleButton.setChecked(true);
-        }else {
-           holder.toggleButton.setChecked(false);
-        }
+          SharedPreferences sharedPreferences = context.getSharedPreferences("tgpref1", Context.MODE_PRIVATE);
+          boolean tgpref = sharedPreferences.getBoolean("tgpref" + position, false);
 
 
+          if (tgpref) {
+              myViewHolder.toggleButton.setChecked(true);
+          } else {
+              myViewHolder.toggleButton.setChecked(false);
+          }
+          break;
+
+      }
     }
 
     @Override
     public int getItemCount() {
         return arrayList.size();
+    }
+
+    // ////////////////////////////////ADCLASS
+
+    public class adviewholder extends RecyclerView.ViewHolder{
+
+        public adviewholder(View itemView) {
+            super(itemView);
+        }
     }
 
     ///////////////////////////////////////////////////////////////
@@ -294,7 +317,9 @@ menuItemHolder.menuItemDescription.setText(menuItem.getDescription());
 
     @Override
     public int getItemViewType(int position) {
-        return position;
+        //every 8 item there will be an ad
+
+        return (position% 4 == 0) ? AD_VIEW_TYPE: MENU_ITEM_VIEW_TYPE;
     }
 }
 
