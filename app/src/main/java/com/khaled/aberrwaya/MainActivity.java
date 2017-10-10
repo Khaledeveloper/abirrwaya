@@ -3,8 +3,6 @@ package com.khaled.aberrwaya;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.nfc.Tag;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
@@ -16,13 +14,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,59 +27,55 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
-import java.util.jar.Attributes;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, MyAdapter.ItemClickListener{
-    ArrayList<StoryModelM> mModel = new ArrayList<>();
-    ArrayList<StoryModel>List_Favorite = new ArrayList<>();
-   // ArrayList<StoryModel>List_FavorteALL = new ArrayList<>();
-   // DB_Sqlite_Favorite db_Fav = new DB_Sqlite_Favorite(this);
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, MyAdapter.ItemClickListener {
+    ArrayList<Object> mModel = new ArrayList<>();
+    ArrayList<StoryModel> List_Favorite = new ArrayList<>();
+    // ArrayList<StoryModel>List_FavorteALL = new ArrayList<>();
+    // DB_Sqlite_Favorite db_Fav = new DB_Sqlite_Favorite(this);
     //String List_Type;
     RecyclerView mRecycleview;
     RecyclerView.LayoutManager layoutManager;
     MyAdapter adapter;
     Toolbar mToolbar;
-    TextView mTextView , rowtext,ContentText ;
+    TextView mTextView, rowtext, ContentText;
     StoryModelM storyModelM;
     ToggleButton toggleButton;
-   /* private NavigationView mDrawer;
-    private DrawerLayout mDrawerLayout;
-    private  ActionBarDrawerToggle drawerToggle;*/
-   Button sharebutton;
+    /* private NavigationView mDrawer;
+     private DrawerLayout mDrawerLayout;
+     private  ActionBarDrawerToggle drawerToggle;*/
+    Button sharebutton;
 
     NavigationView mDrawer;
     DrawerLayout mDreawerLayout;
     ActionBarDrawerToggle drawerToggle;
     public Context context;
     AdView adView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mToolbar =(Toolbar)findViewById(R.id.ToolbarmainID);
+        mToolbar = (Toolbar) findViewById(R.id.ToolbarmainID);
         setSupportActionBar(mToolbar);
 
 
-
-     adView  =(AdView)findViewById(R.id.AdBannerMainID);
-
+        adView = (AdView) findViewById(R.id.AdBannerMainID);
 
 
-       // getPre();
+        // getPre();
 
-     //   mToolbar.setTitleTextColor(Color.WHITE);
-      //  mTextView = (TextView) findViewById(R.id.TextViewMainID);
-
-
+        //   mToolbar.setTitleTextColor(Color.WHITE);
+        //  mTextView = (TextView) findViewById(R.id.TextViewMainID);
 
 
         List_Index();
 
 
-
     }
 
-    public void AdView(){
+    public void AdView() {
 
 
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -94,13 +85,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
 
     public void List_Index() {
-        mRecycleview =(RecyclerView)findViewById(R.id.RecyclerViewMainID);
-         //  List_Type ="Index";
-        if (getSupportActionBar()!=null) {
+        mRecycleview = (RecyclerView) findViewById(R.id.RecyclerViewMainID);
+        //  List_Type ="Index";
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("روايات عبير");
         }
 
-       // mTextView.setText("روايات عبير");
+        // mTextView.setText("روايات عبير");
 
         layoutManager = new LinearLayoutManager(this);
         mRecycleview.setLayoutManager(layoutManager);
@@ -112,12 +103,31 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         final String[] ListIndex = getResources().getStringArray(R.array.TitleIndex);
         final String[] ListContest = getResources().getStringArray(R.array.ContentIndex);
 
-        int count = 0;
+        /*int count = 0;
 
         for (String Name : ListIndex ){
             mModel.add(new StoryModelM(Name,ListContest[count]));
             count++;
+        }*/
+
+        for(int x = 0 ; x<ListIndex.length;x++){
+            StoryModelM storyModelM = new StoryModelM(ListIndex[x],ListContest[x]);
+            mModel.add(storyModelM);
         }
+
+
+        /* wrong method .. kept repeating 4 position
+        StoryModelM st = new StoryModelM();
+        for (int x = 0; x < ListContest.length; x++) {
+
+            st.setTitleModel(ListIndex[x]);
+            st.setContentModel(ListContest[x]);
+
+            mModel.add(st);
+
+        }*/
+
+
         adapter = new MyAdapter(mModel);
         mRecycleview.setAdapter(adapter);
 
@@ -128,25 +138,25 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public void onItemClick(View view, int position, long id) {
-        sharebutton=(Button)view.findViewById(R.id.shareCardID);
-       // sharebutton.setOnClickListener(new View.OnClickListener() {
+        sharebutton = (Button) view.findViewById(R.id.shareCardID);
+        // sharebutton.setOnClickListener(new View.OnClickListener() {
 
 
-        toggleButton =(ToggleButton) view.findViewById(R.id.ToggleHeartID);
+        toggleButton = (ToggleButton) view.findViewById(R.id.ToggleHeartID);
 
 
-       rowtext =(TextView)view.findViewById(R.id.TextViewTitleID);
+        rowtext = (TextView) view.findViewById(R.id.TextViewTitleID);
 
         String mTitle = rowtext.getText().toString();
 
-        ContentText =(TextView)view.findViewById(R.id.TextViewContentID);
+        ContentText = (TextView) view.findViewById(R.id.TextViewContentID);
         String mContent = ContentText.getText().toString();
 
 
 
        /* int PageNum = 0;
         if (List_Type.equals("Index")){*/
-          int  PageNum = position;
+        int PageNum = position;
        /* }else if (List_Type.equals("Favorite")){
             PageNum =List_Favorite.get(position).getPageid();
         }*/
@@ -158,16 +168,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         startActivity(intent);
 
 
-
-
-
-       //tring mTitle = adapter.getItem(position);
-
-
-
-
-
-
+        //tring mTitle = adapter.getItem(position);
 
 
         Toast.makeText(this, PageNum + mTitle, Toast.LENGTH_SHORT).show();
@@ -176,23 +177,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menumain, menu);
-        MenuItem searchItem= menu.findItem(R.id.SearchID);
-        SearchView searchView=(SearchView) MenuItemCompat.getActionView(searchItem);
+        MenuItem searchItem = menu.findItem(R.id.SearchID);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(this);
-
-
-
-
-
-
 
 
         return true;
     }
 
-    public void getPre(){
+    public void getPre() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean tgpref = preferences.getBoolean("tgpref",true);
+        boolean tgpref = preferences.getBoolean("tgpref", true);
         toggleButton.setChecked(tgpref);
 
     }
@@ -201,25 +196,25 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id==R.id.signupmenu){
+        if (id == R.id.signupmenu) {
 
-            Intent intent = new Intent(MainActivity.this,signup.class);
+            Intent intent = new Intent(MainActivity.this, signup.class);
             startActivity(intent);
 
 
         }
 
-      if (id == R.id.FavoritListID) {
+        if (id == R.id.FavoritListID) {
             //Toast.makeText(this,"Favorite List", Toast.LENGTH_SHORT).show();
-          //  List_Type = "Favorite";
+            //  List_Type = "Favorite";
          /*   if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle("Favorites");
             }*/
-         //   List_Favorite = db_Fav.getAllFavorite();
+            //   List_Favorite = db_Fav.getAllFavorite();
 
 
-           Intent intent = new Intent(MainActivity.this, FavoriteContent.class);
-                startActivity(intent);
+            Intent intent = new Intent(MainActivity.this, FavoriteContent.class);
+            startActivity(intent);
          /*    Intent intent= new Intent(MainActivity.this, listvieww.class);
           startActivity(intent);*/
 
@@ -234,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 // mRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();*/
 
-    }
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -244,27 +239,41 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         return false;
     }
 
+
     @Override
     public boolean onQueryTextChange(String newText) {
 
 
-        ArrayList<StoryModelM> newList = new ArrayList<>();
-        for (StoryModelM storyModel : mModel) {
-            String name = storyModel.getTitleModel();
+        ArrayList<Object> newList = new ArrayList<>();
+        for (int x = 0 ; x<mModel.size() ; x++) {
+            StoryModelM mm =(StoryModelM)mModel.get(x);
+            String name = mm.getTitleModel();
             if (name.contains(newText))
-                newList.add(storyModel);
+                newList.add(mm);
         }
         adapter.setFilter(newList);
 
         return true;
     }
 
-    public void Toggle(View view) {
-      /*  ToggleButton toggleButton =(ToggleButton)findViewById(R.id.ToggleHeartID);
-        Animation pulse = AnimationUtils.loadAnimation(this,R.anim.pulse);
-        toggleButton.startActionMode(pulse);*/
+
+
+
+    /*
+
+    ArrayList<Object> newList = new ArrayList<>();
+    String titlemModel[] = new String[sto.getTitleModel().length()];
+              for(int x = 0 ; x<titlemModel.length ; x++){
+        titlemModel[x] =sto.getTitleModel();
+        for (String name : titlemModel){
+            name = sto.getTitleModel();
+            if (name.contains(newText))
+                newList.add(titlemModel);
+        }
+        adapter.setFilter(newList);
+     */
+
+
+
     }
 
-   /* public void DeleteR(View view) {
-    }*/
-}

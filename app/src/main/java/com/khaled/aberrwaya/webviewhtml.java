@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -17,7 +18,7 @@ public class webviewhtml extends AppCompatActivity {
     WebView mWebview;
     int page;
     String StoryTitle, StoryContent;
-    ArrayList<StoryModel> List_Favorite = new ArrayList<>();
+    ArrayList<StoryModelM> List_Favorite = new ArrayList<>();
     DB_Sqlite_Favorite db_fav = new DB_Sqlite_Favorite(this);
     private Menu menu;
 
@@ -94,10 +95,17 @@ public class webviewhtml extends AppCompatActivity {
 
 
 
+
         if (item.getItemId() == android.R.id.home) {
             finish();
         }
         if (item.getItemId() == R.id.FavoritID)  {
+
+
+
+
+
+
 
 
             int check= db_fav.get_check_List_Favorite(StoryTitle);

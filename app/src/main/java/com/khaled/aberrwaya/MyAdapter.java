@@ -28,7 +28,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     ItemClickListener mItemClickListener;
     DB_Sqlite_Favorite db_fav;
-    ArrayList<StoryModelM> arrayList = new ArrayList<>();
+    ArrayList<Object> arrayList = new ArrayList<>();
     public Context context;
     ArrayList<StoryModel> List_favorite = new ArrayList<>();
 
@@ -36,10 +36,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
 
 
-    MyAdapter(ArrayList<StoryModelM> arrayList){
+    public MyAdapter(ArrayList<Object> arrayList){
         this.arrayList=arrayList;
         //db_fav = new DB_Sqlite_Favorite(context);
     }
+    /*public MyAdapter(){
+
+    }*/
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,8 +56,33 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public void onBindViewHolder( MyViewHolder holder, int position) {
 
-        holder.Listindex.setText(arrayList.get(position).getTitleModel());
-       holder.ListContent.setText(arrayList.get(position).getContentModel());
+
+        /*
+
+           MenuItemViewHolder menuItemHolder = (MenuItemViewHolder) holder;
+                MenuItem menuItem = (MenuItem) mRecyclerViewItems.get(position);
+
+                // Get the menu item image resource ID.
+                String imageName = menuItem.getImageName();
+                int imageResID = mContext.getResources().getIdentifier(imageName, "drawable",
+                        mContext.getPackageName());
+
+                // Add the menu item details to the menu item view.
+                menuItemHolder.menuItemImage.setImageResource(imageResID);
+                menuItemHolder.menuItemName.setText(menuItem.getName());
+                menuItemHolder.menuItemPrice.setText(menuItem.getPrice());
+                menuItemHolder.menuItemCategory.setText(menuItem.getCategory());
+menuItemHolder.menuItemDescription.setText(menuItem.getDescription());
+
+         */
+      //  StoryModelM  storyModelM = new StoryModelM();
+        StoryModelM story =(StoryModelM) arrayList.get(position);
+        MyViewHolder myViewHolder = (MyViewHolder) holder;
+       /* myViewHolder.Listindex.setText(story.getTitleModel());
+        myViewHolder.ListContent.setText(story.getContentModel());*/
+
+       holder.Listindex.setText(story.getTitleModel());
+       holder.ListContent.setText(story.getContentModel());
 
         String mTitle =holder.Listindex.getText().toString();
 
@@ -78,18 +106,100 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public int getItemCount() {
         return arrayList.size();
     }
+
+    ///////////////////////////////////////////////////////////////
+    //MyViewholder Class
+
+
     public  class  MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView Listindex;
       TextView ListContent;
-        ToggleButton toggleButton;
+      ToggleButton toggleButton;
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+        //togbtn method
+        public  void togbtn(View v, Context context){
+          int position = getAdapterPosition();
+            if (toggleButton.isChecked()) {
+                String mTitle = Listindex.getText().toString();
+                String mContent =ListContent.getText().toString();
+
+                //Toast.makeText(context, mTitle, Toast.LENGTH_SHORT).show();
+                int check = db_fav.get_check_List_Favorite(mTitle);
+                if (check>0){
+                    Toast.makeText(context, "عفوا العنوان موجود بالمفضلة", Toast.LENGTH_SHORT).show();
+                }else {
+                    db_fav.Insert_to_favorite(mTitle,mContent,position);
+                    Toast.makeText(context, "تم الاضافة الي المفضلة", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+                Animation plus = AnimationUtils.loadAnimation(v.getContext(), R.anim.pulse);
+                toggleButton.startAnimation(plus);
+                SharedPreferences sharedPreferences = context.getSharedPreferences("tgpref1", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("tgpref"+position, true);
+
+                editor.commit();
+
+
+
+            }
+
+
+            else {
+
+                         /*  int x;
+                           for (x = 0; x<List_favorite.size(); x++) {
+                               int idint = List_favorite.get(x).getIdrow();
+                               String idfinal = String.valueOf(idint+position);
+
+                           }*/
+
+                db_fav.DeletRow(Listindex.getText().toString());
+                Toast.makeText(context, "تم الازلالة من المفضلة", Toast.LENGTH_SHORT).show();
 
 
 
 
 
+
+
+                SharedPreferences sharedPreferences = itemView.getContext().getSharedPreferences("tgpref1", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putBoolean("tgpref"+position, false);
+                editor.commit();
+
+
+
+
+
+
+
+
+
+            }
+
+        }
+
+////////////////////////////////////////////////////////////////////////////--
+
+
+
+
+
+//MyViewhold Constructor--->
 
         public MyViewHolder(final View itemView) {
+
             super(itemView);
+
+
+
+
 
             final Context context = itemView.getContext();
             db_fav = new DB_Sqlite_Favorite(context);
@@ -129,69 +239,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
            toggleButton.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
-                   int position = getAdapterPosition();
 
-                       if (toggleButton.isChecked()) {
-                           String mTitle = Listindex.getText().toString();
-                           String mContent =ListContent.getText().toString();
+                   togbtn(v, context);
 
-                           //Toast.makeText(context, mTitle, Toast.LENGTH_SHORT).show();
-                          int check = db_fav.get_check_List_Favorite(mTitle);
-                          if (check>0){
-                               Toast.makeText(context, "عفوا العنوان موجود بالمفضلة", Toast.LENGTH_SHORT).show();
-                           }else {
-                               db_fav.Insert_to_favorite(mTitle,mContent,position);
-                              Toast.makeText(context, "تم الاضافة الي المفضلة", Toast.LENGTH_SHORT).show();
-                           }
-
-
-
-                           Animation plus = AnimationUtils.loadAnimation(v.getContext(), R.anim.pulse);
-                           toggleButton.startAnimation(plus);
-                          SharedPreferences sharedPreferences = context.getSharedPreferences("tgpref1", Context.MODE_PRIVATE);
-                           SharedPreferences.Editor editor = sharedPreferences.edit();
-                           editor.putBoolean("tgpref"+position, true);
-
-                           editor.commit();
-
-
-
-                       }
-
-
-                       else {
-
-                         /*  int x;
-                           for (x = 0; x<List_favorite.size(); x++) {
-                               int idint = List_favorite.get(x).getIdrow();
-                               String idfinal = String.valueOf(idint+position);
-
-                           }*/
-
-                           db_fav.DeletRow(Listindex.getText().toString());
-                           Toast.makeText(context, "تم الازلالة من المفضلة", Toast.LENGTH_SHORT).show();
-
-
-
-
-
-
-
-                           SharedPreferences sharedPreferences = itemView.getContext().getSharedPreferences("tgpref1", Context.MODE_PRIVATE);
-                           SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                           editor.putBoolean("tgpref"+position, false);
-                           editor.commit();
-
-
-
-
-
-
-
-
-
-                       }
 
 
                }
@@ -202,6 +252,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
 
         }
+
+
+        /////////////////////////////////////////////////////////////////
 
         @Override
         public void onClick(View v) {
@@ -216,7 +269,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     }
 
-    public void setFilter(ArrayList<StoryModelM> newList) {
+    public void setFilter(ArrayList<Object> newList) {
 
         arrayList= new ArrayList<>();
         arrayList.addAll(newList);

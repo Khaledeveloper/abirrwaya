@@ -15,6 +15,9 @@ public class StoryModelM {
         ContentModel = contentModel;
 
     }
+    public StoryModelM(){
+
+    }
 
     public String getTitleModel() {
         return TitleModel;
